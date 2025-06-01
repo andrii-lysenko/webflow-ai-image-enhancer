@@ -1,0 +1,76 @@
+{
+  "name": "ai-image-enhancer-webflow-extension",
+  "displayName": "AI Image Enhancement - Webflow Designer Extension",
+  "description": "A powerful Webflow Designer Extension that brings AI-powered image enhancement and generation capabilities directly into your Webflow design workflow using Google's Gemini AI.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/webflow-ai-image-extension.git"
+  },
+  "homepage": "https://github.com/your-username/webflow-ai-image-extension#readme",
+  "bugs": {
+    "url": "https://github.com/your-username/webflow-ai-image-extension/issues"
+  },
+  "keywords": [
+    "webflow",
+    "designer-extension",
+    "ai",
+    "image-enhancement",
+    "image-generation",
+    "gemini",
+    "google-ai",
+    "react",
+    "typescript"
+  ],
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:prod": "tsc && vite build --mode prod  && webflow extension bundle && mv bundle.zip bundle/prod/bundle_$(date +'%Y-%m-%d_%H-%M-%S').zip",
+    "build:dev": "tsc && vite build --mode development && webflow extension bundle && mv bundle.zip bundle/development/bundle_$(date +'%Y-%m-%d_%H-%M-%S').zip",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "license-headers": "node scripts/add-license-headers.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.2.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.8",
+    "@mui/material": "^6.1.7",
+    "@mui/styled-engine": "^6.1.7",
+    "@mui/system": "^6.1.7",
+    "@tailwindcss/vite": "^4.1.6",
+    "@tanstack/react-query": "^5.56.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@uiw/react-textarea-code-editor": "^3.1.0",
+    "jwt-decode": "^4.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "react-syntax-highlighter": "^15.6.1",
+    "openai": "^5.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^22.5.5",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@webflow/designer-extension-typings": "*",
+    "autoprefixer": "^10.4.21",
+    "chokidar": "^3.6.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1"
+  }
+}
