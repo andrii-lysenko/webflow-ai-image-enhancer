@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { ThemeProvider, Box } from "@mui/material";
 
 import { theme } from "./components/theme";
@@ -38,6 +38,7 @@ function App() {
  */
 function AppContent() {
   const [apiToken, setApiToken] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     webflow.setExtensionSize("comfortable");
@@ -47,9 +48,11 @@ function AppContent() {
     setApiToken(token);
   };
 
-  const handleTokenClear = () => {
-    setApiToken("");
-  };
+  useEffect(() => {
+    if (apiToken) {
+      navigate("/");
+    }
+  }, [apiToken]);
 
   // Show onboarding if no token
   if (!apiToken) {
@@ -65,20 +68,6 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<Chat mode="enhance" />} />
             <Route path="/generate" element={<Chat mode="generate" />} />
-            <Route
-              path="/settings"
-              element={
-                <Settings
-                  apiToken={apiToken}
-                  onTokenChange={setApiToken}
-                  onTokenClear={handleTokenClear}
-                />
-              }
-            />
-            <Route
-              path="/onboarding"
-              element={<Onboarding onTokenSubmit={handleTokenSubmit} />}
-            />
           </Routes>
         </Box>
       </ChatProvider>
