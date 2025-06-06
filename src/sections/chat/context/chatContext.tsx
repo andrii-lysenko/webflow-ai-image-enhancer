@@ -8,15 +8,14 @@ import React, {
   useRef,
   useContext,
 } from "react";
-import { ChatMode } from "../types";
+import { ChatMode, ImageStatus, Message } from "../types";
 import { useAIAgent } from "../../../lib/ai/hooks/useAIModel";
 import { getImageAsBase64 } from "../../../lib/utils/image";
 import { AIImage } from "../../../types/types";
 import { Agent } from "../../../lib/ai/agents/Agent";
+import { createMessage } from "../utils/messages";
 
 // Types
-type MessageRole = "user" | "assistant";
-type ImageStatus = "pending" | "accepted" | "declined";
 
 export const useChat = () => {
   const context = useContext(ChatContext);
@@ -24,17 +23,6 @@ export const useChat = () => {
     throw new Error("useChat must be used within a ChatProvider");
   }
   return context;
-};
-
-export type Message = {
-  id: string;
-  role: MessageRole;
-  content: string;
-  timestamp: Date;
-  images?: string[]; // URLs for the images
-  enhancedImageUrl?: string; // URL for the enhanced image
-  enhancedImageData?: string; // Base64 data for the enhanced image
-  imageStatus?: ImageStatus; // Status of the enhanced image
 };
 
 interface ChatContextType {
@@ -64,33 +52,10 @@ export const ChatContext = createContext<ChatContextType | undefined>(
   undefined
 );
 
-// Helper function to create a message
-function createMessage(
-  role: MessageRole,
-  content: string,
-  images?: string[],
-  enhancedImageUrl?: string,
-  enhancedImageData?: string
-): Message {
-  return {
-    id: Date.now().toString() + role,
-    role,
-    content,
-    timestamp: new Date(),
-    images,
-    enhancedImageUrl,
-    enhancedImageData,
-    imageStatus: enhancedImageUrl ? "pending" : undefined,
-  };
-}
-
-// Provider component
-// TODO: refactor this possibly using redux
 export const ChatProvider: React.FC<{
   children: ReactNode;
   token: string;
 }> = ({ children, token }) => {
-  // State hooks for each piece of state
   const [enhanceMessages, setEnhanceMessages] = useState<Message[]>([]);
   const [generateMessages, setGenerateMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -138,11 +103,6 @@ export const ChatProvider: React.FC<{
       imagePreviewUrls.forEach(URL.revokeObjectURL);
     };
   }, [imagePreviewUrls]);
-
-  // Set current mode
-  const setMode = useCallback((mode: ChatMode) => {
-    setCurrentMode(mode);
-  }, []);
 
   // Handle image selection
   const handleImageSelect = useCallback(
@@ -349,7 +309,7 @@ export const ChatProvider: React.FC<{
         handleImageSelect,
         removeImage,
         handleSendMessage,
-        setMode,
+        setMode: setCurrentMode,
         updateMessageImageStatus,
         fileInputRef,
         enhancer,

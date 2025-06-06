@@ -7,7 +7,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useAcceptImage } from "./hooks/useAcceptImage";
-import { Message, useChat } from "./context/chatContext";
+import { useChat } from "./context/chatContext";
+import { Message } from "./types";
 
 type ChatMessageProps = {
   message: Message;

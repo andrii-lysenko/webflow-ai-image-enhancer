@@ -16,7 +16,6 @@ import { theme } from "./components/theme";
 import "./App.css";
 import { Chat } from "./sections/chat";
 import { ChatProvider } from "./sections/chat/context/chatContext";
-import { Settings } from "./sections/settings";
 import { Navigation } from "./sections/navigation";
 import { Onboarding } from "./sections/onboarding";
 

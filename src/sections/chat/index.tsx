@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef, useEffect } from "react";
 import { ImageIcon, SendIcon } from "./icons";
 import { EmptyStateMessage } from "./empty-message";
