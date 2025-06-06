@@ -40,3 +40,8 @@ export function getAgent(type: AgentType, model: AIModel) {
 
   return new ImageGeneratorAgent(model);
 }
+
+export function createAIAgent(type: AgentType, apiKey: string, model: string) {
+  const getModel = getModelInstance("gemini", apiKey, model);
+  return getAgent(type, getModel());
+}

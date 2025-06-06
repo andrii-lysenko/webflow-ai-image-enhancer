@@ -3,7 +3,6 @@ import chokidar from "chokidar";
 import fs from "fs";
 import path from "path";
 import { defineConfig, Plugin } from "vite";
-import tailwindcss from "@tailwindcss/vite";
 
 const wfDesignerExtensionPlugin = (watchPatterns: string[] = []): Plugin => {
   let webflowHTML = "";
@@ -95,7 +94,6 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    tailwindcss(),
     wfDesignerExtensionPlugin(["../nextjs-app/app/api/**/*.ts"]),
   ],
   root: "./",
