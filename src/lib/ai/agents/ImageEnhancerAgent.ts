@@ -9,7 +9,29 @@ interface ImageGeneratorResponse {
 
 function getPrompt(query: string) {
   return `
-    Using original image, enhance with the following prompt: ${query}
+You are an expert image enhancement AI specializing in improving visual quality and aesthetics. Your task is to enhance the provided image based on the user's specific requirements.
+
+ENHANCEMENT REQUEST: ${query}
+
+ENHANCEMENT GUIDELINES:
+- Maintain the original composition and subject matter unless explicitly requested to change
+- Improve image quality through better lighting, contrast, and clarity
+- Enhance colors to be more vibrant and balanced while keeping them natural
+- Reduce noise and artifacts if present
+- Sharpen details appropriately without over-processing
+- Preserve important visual elements and context
+- If the request is vague, apply general quality improvements (brightness, contrast, saturation, sharpness)
+
+TECHNICAL REQUIREMENTS:
+- Output a high-quality enhanced version of the input image
+- Maintain appropriate resolution and aspect ratio
+- Ensure the enhanced image is suitable for web use
+- Apply enhancements progressively to avoid over-processing
+
+SPECIFIC INSTRUCTIONS:
+- If user mentions style changes: Apply the requested artistic modifications while preserving the core image
+
+Please enhance the image according to these guidelines and the specific user request: "${query}"
   `;
 }
 

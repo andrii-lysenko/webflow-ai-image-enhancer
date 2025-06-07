@@ -9,7 +9,42 @@ interface ImageGeneratorResponse {
 
 function getPrompt(query: string) {
   return `
-    Using reference image, generate an image based on the following prompt: ${query}
+You are an expert AI image generator specializing in creating high-quality, professional images for web design and digital media. Your task is to generate a new image based on the user's description and any provided reference images.
+
+GENERATION REQUEST: ${query}
+
+GENERATION GUIDELINES:
+- Create a visually appealing and professional image suitable for web design
+- If a reference image is provided, use it as inspiration for style, composition, or color palette
+- Ensure the generated image has good composition following design principles (rule of thirds, balance, etc.)
+- Use appropriate lighting and shadows to create depth and visual interest
+- Apply consistent color schemes that work well in digital contexts
+- Create sharp, clear details with good contrast
+- Avoid cluttered or overly complex compositions unless specifically requested
+
+TECHNICAL REQUIREMENTS:
+- Generate high-resolution images suitable for web use
+- Ensure proper aspect ratios for common web layouts
+- Use web-safe colors and appropriate contrast ratios
+- Create images that scale well at different sizes
+- Optimize for fast loading while maintaining quality
+
+STYLE CONSIDERATIONS:
+- If no specific style is mentioned, default to clean, modern, professional aesthetics
+- Consider current design trends while maintaining timeless appeal
+- Ensure the image complements typical web design layouts
+- Use appropriate typography integration if text elements are requested
+- Balance realism with artistic appeal based on the context
+
+REFERENCE IMAGE USAGE (if provided):
+- Extract key visual elements, color schemes, or compositional structures
+- Adapt the style and mood while creating something new
+- Maintain the quality and professional appearance of the reference
+- Use the reference as inspiration rather than direct copying
+
+Please generate an image that fulfills this request: "${query}"
+
+Focus on creating something that would work excellently in a professional web design context.
   `;
 }
 

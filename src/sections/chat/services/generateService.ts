@@ -9,6 +9,7 @@ export const makeGenerateRequest = async (
     throw new Error("Generator agent not found.");
   }
 
+  // Convert images to base64
   const processedImages = await Promise.all(
     selectedImages.map(async (file) => {
       return new Promise<{ data: string; mimeType: string }>((resolve) => {
