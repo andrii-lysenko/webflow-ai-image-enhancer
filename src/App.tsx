@@ -18,6 +18,7 @@ import { Chat } from "./sections/chat";
 import { ChatProvider } from "./sections/chat/context/chatContext";
 import { Navigation } from "./sections/navigation";
 import { Onboarding } from "./sections/onboarding";
+import { Help } from "./sections/help";
 
 // Constants
 const API_TOKEN_STORAGE_KEY = "ai-image-enhancer-api-token";
@@ -119,6 +120,7 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<Chat mode="enhance" />} />
             <Route path="/generate" element={<Chat mode="generate" />} />
+            <Route path="/help" element={<Help />} />
           </Routes>
         </Box>
       </ChatProvider>
