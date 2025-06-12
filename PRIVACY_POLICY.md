@@ -28,10 +28,12 @@ We do **NOT** collect, store, or process:
 
 ### 2.2 API Keys and Credentials
 
-- Your Google AI Studio API key is stored **only in your browser's memory** during your session
-- We **never** transmit, store, or have access to your API credentials
-- API keys are **not** persisted to any form of storage (localStorage, sessionStorage, etc.)
-- When you close the extension, your API key is automatically cleared
+- Your Google AI Studio API key is stored **only in your browser** (either in memory or optionally in localStorage if you choose)
+- We **never** transmit, store, or have access to your API credentials on our servers
+- **Optional localStorage**: You can choose to save your API key in browser localStorage for convenience
+- **Security Warning**: localStorage is not encrypted and may be accessible to other scripts - use at your own risk
+- **Default Behavior**: By default, API keys are only stored in memory and cleared when you close the extension
+- **User Control**: You have full control over whether your API key is persisted locally
 
 ### 2.3 Images and Content
 
@@ -52,9 +54,10 @@ We do **NOT** collect, store, or process:
 
 1. **Input**: You enter your Google AI Studio API key in the onboarding screen
 2. **Validation**: The extension validates the key format locally (checks if it starts with "AIza")
-3. **Storage**: The key is stored temporarily in your browser's memory (React state)
-4. **Usage**: The key is used to authenticate directly with Google's AI services
-5. **Clearing**: The key is automatically cleared when you close the extension
+3. **Storage Choice**: You can choose to store the key in memory only (default) or optionally in browser localStorage
+4. **Storage**: The key is stored in your browser's memory (React state) and optionally in localStorage if you enable it
+5. **Usage**: The key is used to authenticate directly with Google's AI services
+6. **Clearing**: Keys stored in memory are cleared when you close the extension; localStorage keys persist until manually cleared
 
 ### 3.2 Image Processing Flow
 
@@ -105,21 +108,36 @@ The extension may store the following **only in your browser**:
 - User interface preferences (theme, settings)
 - Extension state during your session
 - Temporary image previews for the user interface
+- **Your API key (ONLY if you choose the "Remember API key" option during setup)**
 
 ### 5.2 What We Do NOT Store Locally
 
-- Your API key (cleared when extension closes)
+- Your API key (by default - only stored if you explicitly enable the "Remember API key" option)
 - Your images or AI-generated content
 - Your Webflow account information
 - Usage history or analytics data
 
-### 5.3 How to Clear Local Data
+### 5.3 localStorage Security Warning
+
+**IMPORTANT SECURITY NOTICE**: If you choose to enable "Remember API key":
+
+- Your API key will be stored in browser localStorage **unencrypted**
+- localStorage may be accessible to other scripts running on the same domain
+- This is **NOT SAFE** for production or sensitive environments
+- We strongly recommend this feature **only for development/testing purposes**
+- **Use at your own risk** - you are responsible for your API key security
+- **Especially risky if using a paid Google AI account** with billing enabled
+
+### 5.4 How to Clear Local Data
 
 You can clear any locally stored data by:
 
+- Using the "Clear API Key" option in the extension's navigation menu
 - Clearing your browser's cache and cookies
 - Using your browser's developer tools to clear local storage
 - Uninstalling and reinstalling the extension
+
+**To clear saved API keys specifically**: Use the "Clear API Key" button in the extension's menu, which will remove both the in-memory token and any saved localStorage data.
 
 ## 6. OPEN SOURCE TRANSPARENCY
 
@@ -260,7 +278,7 @@ When you use the extension to process images that may contain personal data:
 
 ### 14.1 Our Retention Policy
 
-- **API Keys**: Not retained (cleared when extension closes)
+- **API Keys**: By default, not retained (cleared when extension closes). If you enable "Remember API key", stored in browser localStorage until manually cleared
 - **Images**: Not stored by us (processed directly with Google)
 - **Usage Data**: Not collected
 - **Preferences**: Stored locally in your browser until you clear them

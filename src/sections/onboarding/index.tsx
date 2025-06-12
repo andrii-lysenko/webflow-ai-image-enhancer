@@ -9,15 +9,20 @@ import {
   Alert,
   CircularProgress,
   Link,
+  FormControlLabel,
+  Checkbox,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
-import { VpnKey, AutoAwesome } from "@mui/icons-material";
+import { VpnKey, AutoAwesome, Info } from "@mui/icons-material";
 
 interface OnboardingProps {
-  onTokenSubmit: (token: string) => void;
+  onTokenSubmit: (token: string, saveToStorage: boolean) => void;
 }
 
 export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
   const [apiToken, setApiToken] = useState("");
+  const [saveToStorage, setSaveToStorage] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,7 +56,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
 
     try {
       // Could add API validation here in the future
-      onTokenSubmit(apiToken.trim());
+      onTokenSubmit(apiToken.trim(), saveToStorage);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       setIsLoading(false);
@@ -71,32 +76,34 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
     <Container
       maxWidth="sm"
       sx={{
-        py: 4,
-        height: "calc(100vh - 56px)",
-        maxHeight: "calc(100vh - 56px)",
+        py: { xs: 2, sm: 4 },
+        height: "100%",
         bgcolor: "grey.50",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        minHeight: 400,
       }}
     >
       <Paper
         elevation={0}
         sx={{
-          p: 4,
+          p: { xs: 3, sm: 4 },
           borderRadius: 2,
           border: 1,
           borderColor: "grey.200",
           bgcolor: "white",
           width: "100%",
           maxWidth: 450,
+          maxHeight: "90vh",
+          overflow: "auto",
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 3,
+            gap: 0.5,
             alignItems: "center",
           }}
         >
@@ -104,9 +111,9 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
           <Box sx={{ textAlign: "center" }}>
             <AutoAwesome
               sx={{
-                fontSize: 48,
+                fontSize: { xs: 40, sm: 48 },
                 color: "primary.main",
-                mb: 2,
+                mb: { xs: 0.5, sm: 1 },
               }}
             />
             <Typography
@@ -116,6 +123,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
                 fontWeight: 600,
                 mb: 1,
                 color: "text.primary",
+                fontSize: { xs: "1.1rem", sm: "1.25rem" },
               }}
             >
               Welcome to AI Image Enhancer!
@@ -123,7 +131,12 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ lineHeight: 1.5, mb: 2 }}
+              sx={{
+                lineHeight: 1.5,
+                mb: 2,
+                fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                px: { xs: 1, sm: 0 },
+              }}
             >
               To get started, you'll need a Google AI Studio API key. You can
               obtain your API key from{" "}
@@ -146,7 +159,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
               sx={{
                 width: "100%",
                 borderRadius: 1,
-                fontSize: "0.875rem",
+                fontSize: { xs: "0.75rem", sm: "0.875rem" },
               }}
             >
               {error}
@@ -165,26 +178,113 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
               placeholder="Gemini API Key"
               autoFocus
               sx={{
-                "& .MuiInputLabel-root": { fontSize: "0.875rem" },
+                "& .MuiInputLabel-root": {
+                  fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                },
                 "& .MuiInputBase-input": {
-                  fontSize: "0.875rem",
+                  fontSize: { xs: "0.8rem", sm: "0.875rem" },
                   fontFamily: "monospace",
+                  padding: { xs: "12px 14px", sm: "16px 14px" },
                 },
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 1,
+                },
+                "& .MuiFormHelperText-root": {
+                  fontSize: { xs: "0.7rem", sm: "0.75rem" },
                 },
               }}
               slotProps={{
                 input: {
                   startAdornment: (
                     <VpnKey
-                      sx={{ color: "action.active", mr: 1, fontSize: "1.2rem" }}
+                      sx={{
+                        color: "action.active",
+                        mr: 1,
+                        fontSize: { xs: "1.1rem", sm: "1.2rem" },
+                      }}
                     />
                   ),
                 },
               }}
-              helperText="Your API key will be stored securely in your browser"
             />
+          </Box>
+
+          {/* Save to Storage Checkbox with Warning */}
+          <Box sx={{ width: "100%" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={saveToStorage}
+                    onChange={(e) => setSaveToStorage(e.target.checked)}
+                    size="medium"
+                    sx={{
+                      color: "warning.main",
+                      "&.Mui-checked": {
+                        color: "warning.main",
+                      },
+                    }}
+                  />
+                }
+                label={
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                      color: "text.secondary",
+                    }}
+                  >
+                    Remember API key
+                  </Typography>
+                }
+                sx={{ m: 0 }}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  fontWeight: "bold",
+                  color: "warning.main",
+                  fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                }}
+              >
+                Important
+              </Typography>
+              <Tooltip
+                title={
+                  <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
+                    <strong>Security Warning:</strong> This stores your API key
+                    in browser localStorage, which is not encrypted and may be
+                    accessible to other scripts. Be especially cautious if using
+                    a paid Google AI account. We recommend entering your key
+                    each session for maximum security.
+                    <em>
+                      Use at your own risk - you are responsible for your API
+                      key security.
+                    </em>
+                  </Typography>
+                }
+                arrow
+                placement="top"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      maxWidth: 280,
+                      fontSize: "0.75rem",
+                      bgcolor: "warning.dark",
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: "warning.dark",
+                    },
+                  },
+                }}
+              >
+                <IconButton size="small" sx={{ p: 0 }}>
+                  <Info sx={{ fontSize: "0.9rem", color: "warning.main" }} />
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Box>
 
           {/* Submit Button */}
@@ -194,9 +294,9 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
             onClick={handleSubmit}
             disabled={isSubmitDisabled}
             sx={{
-              py: 1.5,
+              py: { xs: 1.2, sm: 1.5 },
               borderRadius: 1,
-              fontSize: "0.8rem",
+              fontSize: { xs: "0.75rem", sm: "0.8rem" },
               fontWeight: 600,
               position: "relative",
             }}
@@ -213,7 +313,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
                 Setting up...
               </>
             ) : (
-              "Get Started"
+              "GET STARTED"
             )}
           </Button>
 
@@ -224,10 +324,11 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
             sx={{
               textAlign: "center",
               lineHeight: 1.4,
-              fontSize: "0.75rem",
+              fontSize: { xs: "0.65rem", sm: "0.75rem" },
             }}
           >
-            Your API key is stored locally in your browser and is never shared.
+            By default, your API key is only stored in memory and will be
+            cleared when you close the extension.
           </Typography>
         </Box>
       </Paper>

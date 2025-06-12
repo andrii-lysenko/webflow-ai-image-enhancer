@@ -26,6 +26,8 @@ The AI Image Enhancement extension is a Webflow Designer Extension that provides
 - You must comply with Google's AI Studio Terms of Service and usage policies
 - You are responsible for all costs and charges associated with your API usage
 - We are not responsible for any unauthorized use of your API credentials
+- **localStorage Warning**: If you choose to save your API key locally, you do so at your own risk and are responsible for the security implications
+- **Security Responsibility**: You acknowledge that localStorage is not encrypted and may be accessible to other scripts
 
 ### 3.2 Content Responsibility
 
@@ -82,8 +84,11 @@ You may not use the Extension to:
 ### 6.3 Local Storage
 
 - The Extension may store preferences and settings locally in your browser
+- **Optional API Key Storage**: You may choose to save your API key in browser localStorage for convenience
+- **Security Warning**: localStorage is unencrypted and may be accessible to other scripts - use at your own risk
+- **Default Behavior**: By default, API keys are only stored in memory and cleared when the extension closes
 - This data is not transmitted to our servers
-- You can clear this data through your browser settings
+- You can clear this data through your browser settings or the Extension's "Clear API Key" feature
 
 ## 7. INTELLECTUAL PROPERTY
 
@@ -142,6 +147,8 @@ You agree to indemnify and hold us harmless from any claims, damages, or expense
 - Content you upload, process, or generate through the Extension
 - Your use of third-party AI services
 - Any legal claims related to AI-generated content
+- **Unauthorized access to or misuse of API keys stored in localStorage**
+- **Security breaches related to locally stored credentials**
 
 ## 10. TERMINATION
 
@@ -154,7 +161,8 @@ You agree to indemnify and hold us harmless from any claims, damages, or expense
 ### 10.2 Effect of Termination
 
 - Your license to use the Extension immediately ends
-- Locally stored data may be retained in your browser
+- Locally stored data (including any saved API keys) may be retained in your browser until manually cleared
+- **Security Recommendation**: Clear any saved API keys from localStorage after termination
 - These Terms survive termination where legally enforceable
 
 ## 11. CHANGES TO SERVICE AND TERMS

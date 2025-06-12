@@ -61,7 +61,7 @@ export function EmptyStateMessage({ mode }: EmptyStateMessageProps) {
       </Typography>
       <Box
         sx={{
-          width: "90%",
+          width: "100%",
           bgcolor: "rgba(0,0,0,0.03)",
           p: 2,
           borderRadius: 2,

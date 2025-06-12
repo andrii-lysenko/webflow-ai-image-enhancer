@@ -9,13 +9,28 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AutoAwesome, AutoFixHigh } from "@mui/icons-material";
+import { AutoAwesome, AutoFixHigh, Logout } from "@mui/icons-material";
 
-export function Navigation() {
+// Use the same storage key as in App.tsx
+const API_TOKEN_STORAGE_KEY = "ai-image-enhancer-api-token";
+
+interface NavigationProps {
+  onLogout?: () => void;
+}
+
+export function Navigation({ onLogout }: NavigationProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,6 +51,31 @@ export function Navigation() {
     setDrawerOpen(false);
   };
 
+  const handleLogoutClick = () => {
+    setLogoutDialogOpen(true);
+    setDrawerOpen(false);
+  };
+
+  const handleLogoutConfirm = () => {
+    // Clear the stored token
+    try {
+      localStorage.removeItem(API_TOKEN_STORAGE_KEY);
+    } catch (error) {
+      console.warn("Failed to clear API token from localStorage:", error);
+    }
+
+    setLogoutDialogOpen(false);
+
+    // Call the logout callback if provided
+    if (onLogout) {
+      onLogout();
+    }
+  };
+
+  const handleLogoutCancel = () => {
+    setLogoutDialogOpen(false);
+  };
+
   return (
     <div>
       <AppBar
@@ -46,7 +86,7 @@ export function Navigation() {
         }}
         elevation={0}
       >
-        <Toolbar>
+        <Toolbar sx={{ position: "relative" }}>
           <IconButton
             edge="start"
             color="inherit"
@@ -55,7 +95,15 @@ export function Navigation() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
             {getCurrentTabName()}
           </Typography>
         </Toolbar>
@@ -77,8 +125,52 @@ export function Navigation() {
               <ListItemText primary={item.text} />
             </ListItemButton>
           ))}
+
+          <Divider sx={{ my: 1 }} />
+
+          <ListItemButton onClick={handleLogoutClick}>
+            <ListItemIcon>
+              <Logout sx={{ color: "warning.main" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary="Clear API Key"
+              primaryTypographyProps={{
+                color: "warning.main",
+                fontSize: "0.9rem",
+              }}
+            />
+          </ListItemButton>
         </List>
       </Drawer>
+
+      {/* Logout Confirmation Dialog */}
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={handleLogoutCancel}
+        aria-labelledby="logout-dialog-title"
+        aria-describedby="logout-dialog-description"
+      >
+        <DialogTitle id="logout-dialog-title">Clear API Key?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="logout-dialog-description">
+            This will clear your stored API key and return you to the setup
+            screen. You'll need to enter your API key again to continue using
+            the extension.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogoutCancel} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleLogoutConfirm}
+            color="warning"
+            variant="contained"
+          >
+            Clear Key
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

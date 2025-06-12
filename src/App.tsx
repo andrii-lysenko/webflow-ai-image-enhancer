@@ -19,6 +19,35 @@ import { ChatProvider } from "./sections/chat/context/chatContext";
 import { Navigation } from "./sections/navigation";
 import { Onboarding } from "./sections/onboarding";
 
+// Constants
+const API_TOKEN_STORAGE_KEY = "ai-image-enhancer-api-token";
+
+// Utility functions for localStorage handling
+const getStoredApiToken = (): string | null => {
+  try {
+    return localStorage.getItem(API_TOKEN_STORAGE_KEY);
+  } catch (error) {
+    console.warn("Failed to read API token from localStorage:", error);
+    return null;
+  }
+};
+
+const setStoredApiToken = (token: string): void => {
+  try {
+    localStorage.setItem(API_TOKEN_STORAGE_KEY, token);
+  } catch (error) {
+    console.warn("Failed to save API token to localStorage:", error);
+  }
+};
+
+const clearStoredApiToken = (): void => {
+  try {
+    localStorage.removeItem(API_TOKEN_STORAGE_KEY);
+  } catch (error) {
+    console.warn("Failed to clear API token from localStorage:", error);
+  }
+};
+
 /**
  * Main App component that handles routing and global state
  */
@@ -40,11 +69,34 @@ function AppContent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    webflow.setExtensionSize("comfortable");
+    // Check for saved API token in localStorage
+    const savedToken = getStoredApiToken();
+    if (savedToken) {
+      setApiToken(savedToken);
+    }
+
+    setTimeout(() => {
+      if (typeof webflow !== "undefined") {
+        // Set extension size for Webflow
+        webflow.setExtensionSize("comfortable");
+      }
+    }, 500);
   }, []);
 
-  const handleTokenSubmit = (token: string) => {
+  const handleTokenSubmit = (token: string, saveToStorage: boolean) => {
     setApiToken(token);
+
+    if (saveToStorage) {
+      setStoredApiToken(token);
+    } else {
+      // Remove any existing saved token if user chooses not to save
+      clearStoredApiToken();
+    }
+  };
+
+  const handleLogout = () => {
+    setApiToken("");
+    clearStoredApiToken();
   };
 
   useEffect(() => {
@@ -62,7 +114,7 @@ function AppContent() {
   return (
     <Box className="app-container">
       <ChatProvider token={apiToken}>
-        <Navigation />
+        <Navigation onLogout={handleLogout} />
         <Box className="content-container">
           <Routes>
             <Route path="/" element={<Chat mode="enhance" />} />
