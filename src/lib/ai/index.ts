@@ -4,28 +4,19 @@ import { AIModel } from "./models/AIModel";
 import { GeminiModel } from "./models/GeminiModel";
 import { OpenAIModel } from "./models/OpenAIModel";
 
-export function getModelInstance(
+export function getModel(
   provider: string,
   apiKey: string,
   model: string
-): () => AIModel {
-  let instance: AIModel;
-  return () => {
-    if (!instance) {
-      switch (provider) {
-        case "openai":
-          instance = new OpenAIModel(apiKey, model);
-          return instance;
-        case "gemini":
-          instance = new GeminiModel(apiKey, model);
-          return instance;
-        default:
-          instance = new OpenAIModel(apiKey, model);
-          return instance;
-      }
-    }
-    return instance;
-  };
+): AIModel {
+  switch (provider) {
+    case "openai":
+      return new OpenAIModel(apiKey, model);
+    case "gemini":
+      return new GeminiModel(apiKey, model);
+    default:
+      return new OpenAIModel(apiKey, model);
+  }
 }
 
 export type AgentType = "imageEnhancer" | "imageGenerator";
@@ -42,6 +33,5 @@ export function getAgent(type: AgentType, model: AIModel) {
 }
 
 export function createAIAgent(type: AgentType, apiKey: string, model: string) {
-  const getModel = getModelInstance("gemini", apiKey, model);
-  return getAgent(type, getModel());
+  return getAgent(type, getModel("gemini", apiKey, model));
 }
