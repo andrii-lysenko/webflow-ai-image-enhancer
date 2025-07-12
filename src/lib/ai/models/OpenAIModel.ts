@@ -61,7 +61,6 @@ export class OpenAIModel implements AIModel {
         imageData,
       };
     } catch (error) {
-      console.error("Error in generateImageFromImage:", error);
       throw error;
     }
   }

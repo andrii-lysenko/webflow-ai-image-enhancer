@@ -70,7 +70,6 @@ export class GeminiModel implements AIModel {
         imageData: outputImageData,
       };
     } catch (error) {
-      console.error("Error in generateImageFromImage:", error);
       throw error;
     }
   }

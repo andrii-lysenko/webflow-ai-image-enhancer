@@ -66,8 +66,6 @@ export class ImageGeneratorAgent implements Agent {
 
       return response;
     } catch (error) {
-      console.error("Error in ImageGeneratorAgent:", error);
-
       return {
         text: `There was an error generating your image. ${
           error instanceof Error ? error.message : String(error)

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useAcceptImage } from "./hooks/useAcceptImage";
 import { useChat } from "./context/chatContext";
 import { Message } from "./types";
+import { Notify } from "./utils/notifications";
 
 type ChatMessageProps = {
   message: Message;
@@ -27,7 +28,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         await createAssetFromImage(message.enhancedImageUrl);
         updateMessageImageStatus(message.id, "accepted");
       } catch (error) {
-        console.error("Error accepting image:", error);
+        Notify.error(`Error accepting image: ${error}`);
       } finally {
         setIsProcessing(false);
       }
