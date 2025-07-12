@@ -16,11 +16,11 @@ import {
 } from "@mui/material";
 import { VpnKey, AutoAwesome, Info } from "@mui/icons-material";
 
-interface OnboardingProps {
+interface Props {
   onTokenSubmit: (token: string, saveToStorage: boolean) => void;
 }
 
-export const Onboarding: React.FC<OnboardingProps> = ({ onTokenSubmit }) => {
+export const Onboarding = ({ onTokenSubmit }: Props) => {
   const [apiToken, setApiToken] = useState("");
   const [saveToStorage, setSaveToStorage] = useState(false);
   const [error, setError] = useState("");

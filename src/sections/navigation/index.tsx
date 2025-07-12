@@ -21,24 +21,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AutoAwesome, AutoFixHigh, Logout, Help } from "@mui/icons-material";
 
-// Use the same storage key as in App.tsx
-const API_TOKEN_STORAGE_KEY = "ai-image-enhancer-api-token";
-
-interface NavigationProps {
-  onLogout?: () => void;
+interface Props {
+  onLogout: () => void;
 }
 
-export function Navigation({ onLogout }: NavigationProps) {
+const menuItems = [
+  { text: "Enhance", icon: <AutoFixHigh />, path: "/" },
+  { text: "Generate", icon: <AutoAwesome />, path: "/generate" },
+  { text: "Help", icon: <Help />, path: "/help" },
+];
+
+export function Navigation({ onLogout }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const menuItems = [
-    { text: "Enhance", icon: <AutoFixHigh />, path: "/" },
-    { text: "Generate", icon: <AutoAwesome />, path: "/generate" },
-    { text: "Help", icon: <Help />, path: "/help" },
-  ];
 
   const getCurrentTabName = () => {
     const currentItem = menuItems.find(
@@ -58,19 +55,8 @@ export function Navigation({ onLogout }: NavigationProps) {
   };
 
   const handleLogoutConfirm = () => {
-    // Clear the stored token
-    try {
-      localStorage.removeItem(API_TOKEN_STORAGE_KEY);
-    } catch (error) {
-      console.warn("Failed to clear API token from localStorage:", error);
-    }
-
+    onLogout();
     setLogoutDialogOpen(false);
-
-    // Call the logout callback if provided
-    if (onLogout) {
-      onLogout();
-    }
   };
 
   const handleLogoutCancel = () => {
