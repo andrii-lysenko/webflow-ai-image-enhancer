@@ -11,7 +11,7 @@ function getPrompt(query: string) {
   return `
 You are an expert image enhancement AI specializing in improving visual quality and aesthetics. Your task is to enhance the provided image based on the user's specific requirements.
 
-ENHANCEMENT REQUEST: ${query}
+ENHANCEMENT REQUEST: "${query}"
 
 ENHANCEMENT GUIDELINES:
 - Maintain the original composition and subject matter unless explicitly requested to change
@@ -31,7 +31,7 @@ TECHNICAL REQUIREMENTS:
 SPECIFIC INSTRUCTIONS:
 - If user mentions style changes: Apply the requested artistic modifications while preserving the core image
 
-Please enhance the image according to these guidelines and the specific user request: "${query}"
+Please enhance the image according to these guidelines and the specific user ENHANCEMENT REQUEST
   `;
 }
 
@@ -40,7 +40,7 @@ export class ImageEnhancerAgent implements Agent {
 
   async respond(
     query: string,
-    images?: AIImage[] // array of image URLs or base64 strings
+    images?: AIImage[] // array of base64 strings
   ): Promise<ImageGeneratorResponse> {
     try {
       if (!images || images.length === 0) {

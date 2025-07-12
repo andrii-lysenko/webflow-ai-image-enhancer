@@ -11,7 +11,7 @@ function getPrompt(query: string) {
   return `
 You are an expert AI image generator specializing in creating high-quality, professional images for web design and digital media. Your task is to generate a new image based on the user's description and any provided reference images.
 
-GENERATION REQUEST: ${query}
+GENERATION REQUEST: "${query}"
 
 GENERATION GUIDELINES:
 - Create a visually appealing and professional image suitable for web design
@@ -42,7 +42,7 @@ REFERENCE IMAGE USAGE (if provided):
 - Maintain the quality and professional appearance of the reference
 - Use the reference as inspiration rather than direct copying
 
-Please generate an image that fulfills this request: "${query}"
+Please generate an image that fulfills this GENERATION REQUEST
 
 Focus on creating something that would work excellently in a professional web design context.
   `;

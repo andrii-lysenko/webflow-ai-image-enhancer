@@ -18,7 +18,6 @@ export const useAcceptImage = () => {
       });
 
       const asset = await webflow.createAsset(file);
-      console.log("Asset created:", asset);
 
       const selectedImage = await webflow.getSelectedElement();
       if (!selectedImage || selectedImage.type !== "Image") {
