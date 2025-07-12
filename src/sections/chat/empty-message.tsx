@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import { ChatIcon } from "./icons";
 import { ChatMode } from "./types";
+import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
 
 type EmptyStateMessageProps = {
   mode: ChatMode;
@@ -37,7 +37,9 @@ export function EmptyStateMessage({ mode }: EmptyStateMessageProps) {
           mb: 2,
         }}
       >
-        <ChatIcon style={{ marginRight: 8, fontSize: "1.5rem" }} />
+        <ChatBubbleOutlineOutlined
+          style={{ marginRight: 8, fontSize: "1.5rem" }}
+        />
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
           {title}
         </Typography>

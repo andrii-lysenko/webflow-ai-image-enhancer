@@ -1,5 +1,4 @@
 import { useRef, useEffect } from "react";
-import { ImageIcon, SendIcon } from "./icons";
 import { EmptyStateMessage } from "./empty-message";
 import { ImagePreview } from "./image-preview";
 import { ChatMessage } from "./message";
@@ -7,6 +6,8 @@ import { Paper, Box, IconButton, TextField } from "@mui/material";
 import { ChatMode } from "./types";
 import { Loading } from "./loading";
 import { useChat } from "./context/chatContext";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import SendIcon from "@mui/icons-material/Send";
 
 type Props = {
   mode: ChatMode;
@@ -16,9 +17,7 @@ export function Chat({ mode }: Props) {
   const {
     messages,
     handleImageSelect,
-    removeImage,
     handleSendMessage,
-    imagePreviewUrls,
     isLoading,
     input,
     selectedImages,
@@ -83,12 +82,7 @@ export function Chat({ mode }: Props) {
       </Box>
 
       {/* Image Preview Area */}
-      {imagePreviewUrls.length > 0 && (
-        <ImagePreview
-          imagePreviewUrls={imagePreviewUrls}
-          removeImage={removeImage}
-        />
-      )}
+      <ImagePreview />
 
       <Paper
         elevation={0}
@@ -108,7 +102,7 @@ export function Chat({ mode }: Props) {
               aria-label="Attach image"
               sx={{ p: 1 }}
             >
-              <ImageIcon />
+              <ImageOutlinedIcon />
             </IconButton>
           )}
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Notify } from "../utils/notifications";
 
 export const useAcceptImage = () => {
   const [isCreatingAsset, setIsCreatingAsset] = useState(false);
@@ -21,26 +22,17 @@ export const useAcceptImage = () => {
 
       const selectedImage = await webflow.getSelectedElement();
       if (!selectedImage || selectedImage.type !== "Image") {
-        webflow.notify({
-          type: "Error",
-          message: "Image is not selected.",
-        });
+        Notify.error("Image is not selected.");
         return false;
       }
 
       selectedImage.setAsset(asset);
 
-      webflow.notify({
-        type: "Success",
-        message: "Asset created successfully!",
-      });
+      Notify.success("Asset created successfully!");
 
       return true;
     } catch (error) {
-      webflow.notify({
-        type: "Error",
-        message: "Error creating asset",
-      });
+      Notify.error("Error creating asset");
 
       return false;
     } finally {

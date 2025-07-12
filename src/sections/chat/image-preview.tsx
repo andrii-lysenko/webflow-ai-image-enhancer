@@ -1,14 +1,11 @@
 import { Box, IconButton } from "@mui/material";
+import { useChat } from "./context/chatContext";
 
-type ImagePreviewProps = {
-  imagePreviewUrls: string[];
-  removeImage: (index: number) => void;
-};
+export function ImagePreview() {
+  const { removeImage, imagePreviewUrls } = useChat();
 
-export function ImagePreview({
-  imagePreviewUrls,
-  removeImage,
-}: ImagePreviewProps) {
+  if (imagePreviewUrls.length === 0) return null;
+
   return (
     <Box
       sx={{

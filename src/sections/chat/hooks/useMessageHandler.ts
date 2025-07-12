@@ -4,6 +4,7 @@ import { createMessage } from "../utils/messages";
 import { makeEnhanceRequest } from "../services/enhanceService";
 import { makeGenerateRequest } from "../services/generateService";
 import { Agent } from "../../../lib/ai/agents/Agent";
+import { Notify } from "../utils/notifications";
 
 interface UseMessageHandlerProps {
   addMessage: (mode: ChatMode, message: any) => void;
@@ -57,10 +58,7 @@ export const useMessageHandler = ({
           const enhancedImageUrl = `data:image/png;base64,${data.imageData}`;
           setEnhancedImage(enhancedImageUrl);
 
-          await webflow.notify({
-            type: "Success",
-            message: "AI response with enhanced image received!",
-          });
+          Notify.success("AI response with enhanced image received!");
         }
 
         const aiResponse = createMessage(
@@ -84,10 +82,7 @@ export const useMessageHandler = ({
 
         addMessage(currentMode, errorResponse);
 
-        await webflow.notify({
-          type: "Error",
-          message: "Failed to process your request. Please try again.",
-        });
+        Notify.error("Failed to process your request. Please try again.");
       } finally {
         setIsLoading(false);
         clearImages();

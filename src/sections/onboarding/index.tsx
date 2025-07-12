@@ -68,6 +68,7 @@ export const Onboarding = ({ onTokenSubmit }: Props) => {
       event.preventDefault();
       handleSubmit();
     }
+    setError("");
   };
 
   const isSubmitDisabled = !apiToken || isLoading;
@@ -247,7 +248,7 @@ export const Onboarding = ({ onTokenSubmit }: Props) => {
                   fontSize: { xs: "0.7rem", sm: "0.75rem" },
                 }}
               >
-                Important
+                Warning
               </Typography>
               <Tooltip
                 title={
