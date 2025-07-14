@@ -3,18 +3,14 @@ import { EmptyStateMessage } from "./empty-message";
 import { ImagePreview } from "./image-preview";
 import { ChatMessage } from "./message";
 import { Paper, Box, IconButton, TextField } from "@mui/material";
-import { ChatMode } from "./types";
 import { Loading } from "./loading";
 import { useChat } from "./context/chatContext";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import SendIcon from "@mui/icons-material/Send";
 
-type Props = {
-  mode: ChatMode;
-};
-
-export function Chat({ mode }: Props) {
+export function Chat() {
   const {
+    mode,
     messages,
     handleImageSelect,
     handleSendMessage,
@@ -22,16 +18,10 @@ export function Chat({ mode }: Props) {
     input,
     selectedImages,
     setInput,
-    setMode,
     fileInputRef,
   } = useChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Update mode when prop changes
-  useEffect(() => {
-    setMode(mode);
-  }, [mode, setMode]);
 
   // Auto-scroll to the bottom when messages change
   useEffect(() => {
@@ -43,9 +33,6 @@ export function Chat({ mode }: Props) {
   };
 
   const isMessageInputEmpty = !input.trim() && selectedImages.length === 0;
-
-  // Get the current mode messages
-  const currentModeMessages = messages[mode];
 
   return (
     <Box
@@ -68,11 +55,11 @@ export function Chat({ mode }: Props) {
           gap: 2,
         }}
       >
-        {currentModeMessages.length === 0 ? (
-          <EmptyStateMessage mode={mode} />
+        {messages.length === 0 ? (
+          <EmptyStateMessage />
         ) : (
           <>
-            {currentModeMessages.map((message) => (
+            {messages.map((message) => (
               <ChatMessage key={message.id} message={message} />
             ))}
             {isLoading && <Loading />}

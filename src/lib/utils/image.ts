@@ -1,4 +1,5 @@
 import path from "path";
+import { Notify } from "../../sections/chat/utils/notifications";
 
 export const SUPPORTED_MIME_TYPES = [
   "image/png",
@@ -64,7 +65,25 @@ export async function getImageAsBase64(url: string): Promise<string | null> {
       reader.readAsDataURL(blob);
     });
   } catch (error) {
-    console.log(error);
+    Notify.error(`Error getting image as base64: ${error}`);
     return null;
   }
+}
+
+export async function createAssetFromImage(imageUrl: string) {
+  const response = await fetch(imageUrl);
+  const blob = await response.blob();
+  const fileName = `enhanced-image-${Date.now()}.png`;
+  const file = new File([blob], fileName, {
+    type: "image/png",
+  });
+
+  const asset = await webflow.createAsset(file);
+
+  const selectedImage = await webflow.getSelectedElement();
+  if (!selectedImage || selectedImage.type !== "Image") {
+    throw new Error("Image is not selected.");
+  }
+
+  selectedImage.setAsset(asset);
 }

@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 export const useImageHandling = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+  const previewUrlsRef = useRef<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageSelect = useCallback(
@@ -14,6 +15,7 @@ export const useImageHandling = () => {
 
       setSelectedImages((prev) => [...prev, ...files]);
       setImagePreviewUrls((prev) => [...prev, ...newPreviewUrls]);
+      previewUrlsRef.current.push(...newPreviewUrls);
     },
     []
   );
@@ -21,6 +23,9 @@ export const useImageHandling = () => {
   const removeImage = useCallback(
     (index: number) => {
       URL.revokeObjectURL(imagePreviewUrls[index]);
+      previewUrlsRef.current = previewUrlsRef.current.filter(
+        (u) => u !== imagePreviewUrls[index]
+      );
 
       setSelectedImages((prev) => prev.filter((_, i) => i !== index));
       setImagePreviewUrls((prev) => prev.filter((_, i) => i !== index));
@@ -33,7 +38,7 @@ export const useImageHandling = () => {
   );
 
   const clearImages = useCallback(() => {
-    imagePreviewUrls.forEach(URL.revokeObjectURL);
+    // imagePreviewUrls.forEach(URL.revokeObjectURL);
     setSelectedImages([]);
     setImagePreviewUrls([]);
 
@@ -42,12 +47,12 @@ export const useImageHandling = () => {
     }
   }, [imagePreviewUrls]);
 
-  // Clean up preview URLs on unmount
+  // Revoke the URLs only when the component is unmounted
   useEffect(() => {
     return () => {
-      imagePreviewUrls.forEach(URL.revokeObjectURL);
+      previewUrlsRef.current.forEach(URL.revokeObjectURL);
     };
-  }, [imagePreviewUrls]);
+  }, []);
 
   return {
     selectedImages,

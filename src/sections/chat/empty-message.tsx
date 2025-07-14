@@ -1,12 +1,10 @@
 import { Box, Typography } from "@mui/material";
-import { ChatMode } from "./types";
 import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
+import { useChat } from "./context/chatContext";
 
-type EmptyStateMessageProps = {
-  mode: ChatMode;
-};
+export function EmptyStateMessage() {
+  const { mode } = useChat();
 
-export function EmptyStateMessage({ mode }: EmptyStateMessageProps) {
   const title = mode === "enhance" ? "Enhance your image" : "Generate an image";
 
   const description =

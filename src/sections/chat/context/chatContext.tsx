@@ -6,11 +6,13 @@ import React, {
   useMemo,
 } from "react";
 import { ChatMode } from "../types";
-import { createAIAgent } from "../../../lib/ai";
+import { getModel } from "../../../lib/ai";
 import { ChatContextType } from "./types/contextTypes";
 import { useChatMessages } from "../hooks/useChatMessages";
 import { useImageHandling } from "../hooks/useImageHandling";
 import { useMessageHandler } from "../hooks/useMessageHandler";
+import { ImageEnhancerAgent } from "../../../lib/ai/agents/ImageEnhancerAgent";
+import { ImageGeneratorAgent } from "../../../lib/ai/agents/ImageGeneratorAgent";
 
 export const useChat = () => {
   const context = useContext(ChatContext);
@@ -28,12 +30,19 @@ export const ChatContext = createContext<ChatContextType | undefined>(
 export const ChatProvider: React.FC<{
   children: ReactNode;
   token: string;
-}> = ({ children, token }) => {
+  mode: ChatMode;
+}> = ({ children, token, mode }) => {
   const [input, setInput] = useState("");
-  const [currentMode, setCurrentMode] = useState<ChatMode>("enhance");
 
   // Custom hooks
-  const { messages, addMessage, updateMessageImageStatus } = useChatMessages();
+  const {
+    messages: allMessages,
+    addMessage,
+    updateMessageImageStatus,
+  } = useChatMessages();
+
+  const messages = allMessages[mode];
+
   const {
     selectedImages,
     imagePreviewUrls,
@@ -45,11 +54,12 @@ export const ChatProvider: React.FC<{
 
   // AI agents
   const enhancer = useMemo(
-    () => createAIAgent("imageEnhancer", token, "gemini-2.0-flash"),
+    () => new ImageEnhancerAgent(getModel("gemini", token, "gemini-2.5-flash")),
     [token]
   );
   const generator = useMemo(
-    () => createAIAgent("imageGenerator", token, "gemini-2.0-flash"),
+    () =>
+      new ImageGeneratorAgent(getModel("gemini", token, "gemini-2.5-flash")),
     [token]
   );
 
@@ -59,7 +69,7 @@ export const ChatProvider: React.FC<{
     enhancedImage,
     handleSendMessage: handleSend,
   } = useMessageHandler({
-    addMessage,
+    addMessage: (message) => addMessage(mode, message),
     clearImages,
     enhancer,
     generator,
@@ -67,7 +77,7 @@ export const ChatProvider: React.FC<{
 
   // Wrap handleSendMessage to pass current state
   const handleSendMessage = () =>
-    handleSend(input, selectedImages, imagePreviewUrls, currentMode, setInput);
+    handleSend(input, selectedImages, imagePreviewUrls, mode, setInput);
 
   return (
     <ChatContext.Provider
@@ -78,13 +88,13 @@ export const ChatProvider: React.FC<{
         imagePreviewUrls,
         isLoading,
         enhancedImage,
-        currentMode,
+        mode,
         setInput,
         handleImageSelect,
         removeImage,
         handleSendMessage,
-        setMode: setCurrentMode,
-        updateMessageImageStatus,
+        updateMessageImageStatus: (id, status) =>
+          updateMessageImageStatus(mode, id, status),
         fileInputRef,
         enhancer,
         generator,

@@ -6,10 +6,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { useAcceptImage } from "./hooks/useAcceptImage";
 import { useChat } from "./context/chatContext";
 import { Message } from "./types";
 import { Notify } from "./utils/notifications";
+import { createAssetFromImage } from "../../lib/utils/image";
 
 type ChatMessageProps = {
   message: Message;
@@ -17,7 +17,6 @@ type ChatMessageProps = {
 
 export function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.role === "user";
-  const { createAssetFromImage } = useAcceptImage();
   const { updateMessageImageStatus } = useChat();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -27,6 +26,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       try {
         await createAssetFromImage(message.enhancedImageUrl);
         updateMessageImageStatus(message.id, "accepted");
+        Notify.success("Asset created successfully!");
       } catch (error) {
         Notify.error(`Error accepting image: ${error}`);
       } finally {

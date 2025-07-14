@@ -7,7 +7,7 @@ import { Agent } from "../../../lib/ai/agents/Agent";
 import { Notify } from "../utils/notifications";
 
 interface UseMessageHandlerProps {
-  addMessage: (mode: ChatMode, message: any) => void;
+  addMessage: (message: any) => void;
   clearImages: () => void;
   enhancer: Agent | null;
   generator: Agent | null;
@@ -32,6 +32,8 @@ export const useMessageHandler = ({
     ) => {
       if ((!input.trim() && selectedImages.length === 0) || isLoading) return;
 
+      clearImages();
+
       try {
         const userMessage = createMessage(
           "user",
@@ -39,7 +41,7 @@ export const useMessageHandler = ({
           imagePreviewUrls.length > 0 ? [...imagePreviewUrls] : undefined
         );
 
-        addMessage(currentMode, userMessage);
+        addMessage(userMessage);
         setInput("");
         setIsLoading(true);
         setEnhancedImage(null);
@@ -71,21 +73,18 @@ export const useMessageHandler = ({
           data.imageData
         );
 
-        addMessage(currentMode, aiResponse);
+        addMessage(aiResponse);
       } catch (error) {
-        console.error("Error getting response from server:", error);
+        Notify.error(`Error getting response from server: ${error}`);
 
         const errorResponse = createMessage(
           "assistant",
           "I'm sorry, I encountered an error while processing your message. Please try again."
         );
 
-        addMessage(currentMode, errorResponse);
-
-        Notify.error("Failed to process your request. Please try again.");
+        addMessage(errorResponse);
       } finally {
         setIsLoading(false);
-        clearImages();
       }
     },
     [isLoading, addMessage, clearImages, enhancer, generator]

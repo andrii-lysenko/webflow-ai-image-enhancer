@@ -19,35 +19,13 @@ import { ChatProvider } from "./sections/chat/context/chatContext";
 import { Navigation } from "./sections/navigation";
 import { Onboarding } from "./sections/onboarding";
 import { Help } from "./sections/help";
+import {
+  getStoredApiToken,
+  setStoredApiToken,
+  clearStoredApiToken,
+} from "./lib/utils/token";
 
 // Constants
-const API_TOKEN_STORAGE_KEY = "ai-image-enhancer-api-token";
-
-// Utility functions for localStorage handling
-const getStoredApiToken = (): string | null => {
-  try {
-    return localStorage.getItem(API_TOKEN_STORAGE_KEY);
-  } catch (error) {
-    console.warn("Failed to read API token from localStorage:", error);
-    return null;
-  }
-};
-
-const setStoredApiToken = (token: string): void => {
-  try {
-    localStorage.setItem(API_TOKEN_STORAGE_KEY, token);
-  } catch (error) {
-    console.warn("Failed to save API token to localStorage:", error);
-  }
-};
-
-const clearStoredApiToken = (): void => {
-  try {
-    localStorage.removeItem(API_TOKEN_STORAGE_KEY);
-  } catch (error) {
-    console.warn("Failed to clear API token from localStorage:", error);
-  }
-};
 
 /**
  * Main App component that handles routing and global state
@@ -114,16 +92,28 @@ function AppContent() {
   // Show main app with token
   return (
     <Box className="app-container">
-      <ChatProvider token={apiToken}>
-        <Navigation onLogout={handleLogout} />
-        <Box className="content-container">
-          <Routes>
-            <Route path="/" element={<Chat mode="enhance" />} />
-            <Route path="/generate" element={<Chat mode="generate" />} />
-            <Route path="/help" element={<Help />} />
-          </Routes>
-        </Box>
-      </ChatProvider>
+      <Navigation onLogout={handleLogout} />
+      <Box className="content-container">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ChatProvider token={apiToken} mode="enhance">
+                <Chat />
+              </ChatProvider>
+            }
+          />
+          <Route
+            path="/generate"
+            element={
+              <ChatProvider token={apiToken} mode="generate">
+                <Chat />
+              </ChatProvider>
+            }
+          />
+          <Route path="/help" element={<Help />} />
+        </Routes>
+      </Box>
     </Box>
   );
 }

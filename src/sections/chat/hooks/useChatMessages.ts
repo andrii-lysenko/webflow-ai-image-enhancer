@@ -1,38 +1,28 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState } from "react";
 import { Message, ChatMode, ImageStatus } from "../types";
 
+type MessagesMap = { enhance: Message[]; generate: Message[] };
+
 export const useChatMessages = () => {
-  const [enhanceMessages, setEnhanceMessages] = useState<Message[]>([]);
-  const [generateMessages, setGenerateMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessagesMap>({
+    enhance: [],
+    generate: [],
+  });
 
-  const messages = useMemo(
-    () => ({
-      enhance: enhanceMessages,
-      generate: generateMessages,
-    }),
-    [enhanceMessages, generateMessages]
-  );
+  const addMessage = (mode: ChatMode, m: Message) =>
+    setMessages((prev) => ({ ...prev, [mode]: [...prev[mode], m] }));
 
-  const updateMessageImageStatus = useCallback(
-    (messageId: string, status: ImageStatus) => {
-      const updateMessages = (prevMessages: Message[]) =>
-        prevMessages.map((msg) =>
-          msg.id === messageId ? { ...msg, imageStatus: status } : msg
-        );
-
-      setEnhanceMessages(updateMessages);
-      setGenerateMessages(updateMessages);
-    },
-    []
-  );
-
-  const addMessage = useCallback((mode: ChatMode, message: Message) => {
-    if (mode === "enhance") {
-      setEnhanceMessages((prev) => [...prev, message]);
-    } else {
-      setGenerateMessages((prev) => [...prev, message]);
-    }
-  }, []);
+  const updateMessageImageStatus = (
+    mode: ChatMode,
+    id: string,
+    status: ImageStatus
+  ) =>
+    setMessages((prev) => ({
+      ...prev,
+      [mode]: prev[mode].map((msg) =>
+        msg.id === id ? { ...msg, imageStatus: status } : msg
+      ),
+    }));
 
   return {
     messages,

@@ -54,13 +54,7 @@ export const Onboarding = ({ onTokenSubmit }: Props) => {
       return;
     }
 
-    try {
-      // Could add API validation here in the future
-      onTokenSubmit(apiToken.trim(), saveToStorage);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      setIsLoading(false);
-    }
+    onTokenSubmit(apiToken.trim(), saveToStorage);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
