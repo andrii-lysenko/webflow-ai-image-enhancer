@@ -2,11 +2,6 @@ import { AIImage } from "../../../types/types";
 import { AIModel } from "../models/AIModel";
 import { Agent } from "./Agent";
 
-interface ImageGeneratorResponse {
-  text: string;
-  imageData?: string; // Base64 encoded image data
-}
-
 function getPrompt(query: string) {
   return `
 You are an expert image enhancement AI specializing in improving visual quality and aesthetics. Your task is to enhance the provided image based on the user's specific requirements.
@@ -41,7 +36,7 @@ export class ImageEnhancerAgent implements Agent {
   async respond(
     query: string,
     images?: AIImage[] // array of base64 strings
-  ): Promise<ImageGeneratorResponse> {
+  ) {
     try {
       if (!images || images.length === 0) {
         return {

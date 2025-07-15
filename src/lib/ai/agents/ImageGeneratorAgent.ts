@@ -2,11 +2,6 @@ import { AIImage } from "../../../types/types";
 import { AIModel } from "../models/AIModel";
 import { Agent } from "./Agent";
 
-interface ImageGeneratorResponse {
-  text: string;
-  imageData?: string; // Base64 encoded image data
-}
-
 function getPrompt(query: string) {
   return `
 You are an expert AI image generator specializing in creating high-quality, professional images for web design and digital media. Your task is to generate a new image based on the user's description and any provided reference images.
@@ -54,7 +49,7 @@ export class ImageGeneratorAgent implements Agent {
   async respond(
     query: string,
     images?: AIImage[] // array of image URLs or base64 strings
-  ): Promise<ImageGeneratorResponse> {
+  ) {
     try {
       const image = images?.length
         ? { data: images[0].data, mimeType: images[0].mimeType }
