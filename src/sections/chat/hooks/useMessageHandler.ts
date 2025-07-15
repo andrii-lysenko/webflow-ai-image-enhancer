@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { ChatMode } from "../types";
-import { createMessage } from "../utils/messages";
+import { createUserMessage, createAssistantMessage } from "../utils/messages";
 import { makeEnhanceRequest } from "../services/enhanceService";
 import { makeGenerateRequest } from "../services/generateService";
 import { Agent } from "../../../lib/ai/agents/Agent";
@@ -35,8 +35,7 @@ export const useMessageHandler = ({
       clearImages();
 
       try {
-        const userMessage = createMessage(
-          "user",
+        const userMessage = createUserMessage(
           input,
           imagePreviewUrls.length > 0 ? [...imagePreviewUrls] : undefined
         );
@@ -51,34 +50,24 @@ export const useMessageHandler = ({
             ? await makeEnhanceRequest(input, enhancer)
             : await makeGenerateRequest(input, selectedImages, generator);
 
-        const data = {
-          response: response.text,
-          imageData: response.imageData,
-        };
-
-        if (data.imageData) {
-          const enhancedImageUrl = `data:image/png;base64,${data.imageData}`;
+        let enhancedImageUrl: string | undefined;
+        if (response?.imageData) {
+          enhancedImageUrl = `data:image/png;base64,${response.imageData}`;
           setEnhancedImage(enhancedImageUrl);
 
           Notify.success("AI response with enhanced image received!");
         }
-
-        const aiResponse = createMessage(
-          "assistant",
-          data.response,
-          undefined,
-          data.imageData
-            ? `data:image/png;base64,${data.imageData}`
-            : undefined,
-          data.imageData
+        const aiResponse = createAssistantMessage(
+          response?.text,
+          enhancedImageUrl,
+          response?.imageData
         );
 
         addMessage(aiResponse);
       } catch (error) {
         Notify.error(`Error getting response from server: ${error}`);
 
-        const errorResponse = createMessage(
-          "assistant",
+        const errorResponse = createAssistantMessage(
           "I'm sorry, I encountered an error while processing your message. Please try again."
         );
 

@@ -18,3 +18,21 @@ export function createMessage(
     imageStatus: enhancedImageUrl ? "pending" : undefined,
   };
 }
+
+export function createUserMessage(content: string, images?: string[]): Message {
+  return createMessage("user", content, images);
+}
+
+export function createAssistantMessage(
+  content: string,
+  enhancedImageUrl?: string,
+  enhancedImageData?: string
+): Message {
+  return createMessage(
+    "assistant",
+    content,
+    undefined,
+    enhancedImageUrl,
+    enhancedImageData
+  );
+}
