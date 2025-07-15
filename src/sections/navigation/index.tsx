@@ -37,12 +37,8 @@ export function Navigation({ onLogout }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const getCurrentTabName = () => {
-    const currentItem = menuItems.find(
-      (item) => item.path === location.pathname
-    );
-    return currentItem ? currentItem.text : "Webflow Extension";
-  };
+  const currentItem = menuItems.find((item) => item.path === location.pathname);
+  const currentTabName = currentItem?.text || "Webflow Extension";
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -91,7 +87,7 @@ export function Navigation({ onLogout }: Props) {
               transform: "translateX(-50%)",
             }}
           >
-            {getCurrentTabName()}
+            {currentTabName}
           </Typography>
         </Toolbar>
       </AppBar>
